@@ -1,0 +1,5 @@
+.DS_Store
+*.folo-tmp
+.obsidian/workspace*.json
+.obsidian/cache
+.trash/

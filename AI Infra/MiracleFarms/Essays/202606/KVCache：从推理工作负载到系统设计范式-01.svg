@@ -1,0 +1,279 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1240" viewBox="0 0 1500 1240" role="img" aria-labelledby="t d">
+  <title id="t">KVCache-centric distributed inference system architecture (SysML-style)</title>
+  <desc id="d">Left compute &amp; scheduling plane drawn as nested SysML containment with cardinality: one service gateway fans out to N clusters (S3 inter-cluster), each cluster routes among M instances (S2 inter-instance), each instance is an xPyD prefill/decode disaggregation that scales dynamically and may use different parallelism such as TP4 vs TP8 (S1 PD-phase), and each prefill/decode node runs an in-engine scheduler over its GPU HBM (S0 intra-machine). Right KVCache data plane holds a four-level storage hierarchy L1 HBM, L2 DDR, L2.5 CXL, L3 SSD, L4 shared pool, with small eviction/prefetch arrows and per-transition latency/bandwidth between tiers, S0-S3 radius tags, and a KV directory queried by the cluster router and fed by KV-manager events.</desc>
+  <defs>
+    <style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif;}</style>
+    <marker id="ar"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"   markerHeight="8"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1f2937"/></marker>
+    <marker id="arSm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#475569"/></marker>
+    <marker id="arG"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"   markerHeight="7"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#15803d"/></marker>
+    <marker id="arC"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"   markerHeight="8"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0891b2"/></marker>
+    <marker id="arCs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6"   markerHeight="6"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0891b2"/></marker>
+    <marker id="arV"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"   markerHeight="7"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#7c3aed"/></marker>
+    <marker id="arA"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"   markerHeight="7"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d97706"/></marker>
+    <marker id="arR"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8.5" markerHeight="8.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#dc2626"/></marker>
+    <marker id="arB"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8.5" markerHeight="8.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2563eb"/></marker>
+    <marker id="arS"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"   markerHeight="7"   orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#64748b"/></marker>
+    <marker id="arRs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#dc2626"/></marker>
+    <marker id="arBs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2563eb"/></marker>
+    <linearGradient id="temp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ef4444"/><stop offset="0.42" stop-color="#f59e0b"/>
+      <stop offset="0.68" stop-color="#60a5fa"/><stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="1240" fill="#ffffff"/>
+  <text x="40" y="40" font-size="25" font-weight="700" fill="#0f172a">分布式推理系统架构 · 从 Agentic 工作负载到 KVCache 中心设计</text>
+
+  <!-- SysML diagram frame + tab -->
+  <rect x="24" y="56" width="1452" height="1158" fill="none" stroke="#334155" stroke-width="2"/>
+  <path d="M24 56 L486 56 L466 88 L24 88 Z" fill="#eef2f7" stroke="#334155" stroke-width="2"/>
+  <text x="42" y="79" font-size="14.5" font-weight="700" fill="#334155">ibd  Distributed LLM Inference  ·  KVCache-centric</text>
+
+  <!-- subtle plane backgrounds -->
+  <rect x="40" y="100" width="784" height="904" rx="14" fill="#fbfcff" stroke="none"/>
+  <rect x="888" y="100" width="580" height="904" rx="14" fill="#fdfcfa" stroke="none"/>
+  <text x="64" y="108" font-size="12" font-weight="700" letter-spacing="1.2" fill="#94a3b8">REQUEST · COMPUTE &amp; SCHEDULING PLANE　｜　请求 · 计算与调度平面（S0–S3 嵌套）</text>
+  <text x="904" y="108" font-size="12" font-weight="700" letter-spacing="1.5" fill="#b08968">KVCACHE DATA PLANE　｜　数据平面（L1–L4）</text>
+
+  <!-- ================= LEFT: COMPUTE / SCHEDULING PLANE (nested S0–S3) ================= -->
+
+  <!-- Client -->
+  <rect x="64" y="116" width="744" height="64" rx="12" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+  <text x="436" y="138" text-anchor="middle" font-size="12" font-style="italic" fill="#64748b">«agentic client · external»</text>
+  <text x="436" y="159" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">Client · 长上下文 / 多轮 / 每轮增长</text>
+  <text x="436" y="175" text-anchor="middle" font-size="11.5" fill="#64748b">Claude Code · OpenClaw · 企业 Coding Agent　｜　输入:输出 ≈ 131:1 · 读:写 ≈ 11.7:1</text>
+
+  <path d="M436 182 L436 198" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#arSm)"/>
+  <text x="445" y="194" font-size="11" fill="#64748b">request</text>
+
+  <!-- Service gateway (front door) -->
+  <rect x="64" y="202" width="744" height="58" rx="12" fill="#f2f7ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="436" y="220" text-anchor="middle" font-size="12" font-style="italic" fill="#2563eb">«service gateway · 前门 · 全局负载均衡»</text>
+  <text x="436" y="239" text-anchor="middle" font-size="16" font-weight="700" fill="#0f2f6b">服务网关（API 前门）</text>
+  <text x="436" y="253" text-anchor="middle" font-size="11" fill="#1e40af">鉴权 / 租户 / 配额 / 限流 · KV identity guard（model · adapter · precision，防 silent corruption）</text>
+
+  <path d="M436 260 L436 276" fill="none" stroke="#475569" stroke-width="1.6" marker-end="url(#arSm)"/>
+
+  <!-- ===== S3 band: 集群之间 (one gateway -> N clusters) ===== -->
+  <rect x="56" y="282" width="752" height="646" rx="16" fill="#eef2ff" stroke="#4338ca" stroke-width="2"/>
+  <rect x="72" y="294" width="40" height="24" rx="6" fill="#4338ca"/>
+  <text x="92" y="311" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">S3</text>
+  <text x="122" y="311" font-size="15" font-weight="700" fill="#4338ca">集群之间 · 跨集群跨区域调度</text>
+  <text x="760" y="311" text-anchor="end" font-size="11.5" fill="#6366f1">一个网关对应 N 个集群（跨区域）</text>
+
+  <!-- S3 scheduling entity: cross-cluster / global router -->
+  <rect x="84" y="328" width="692" height="46" rx="8" fill="#ffffff" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="100" y="347" font-size="12" font-weight="700" fill="#4338ca">跨集群路由器 / 全局调度器（选 Region / Cluster，不接管集群内路由）· 查全局 KV 视图</text>
+  <text x="100" y="365" font-size="10.5" fill="#3730a3">联合代价 = 网络延迟 + KV 相似度 + 队列深度 · 系统 GORGO / SkyWalker · 学习式 Lodestar 可替换打分</text>
+
+  <!-- ghost cluster (multiplicity hint) -->
+  <rect x="92" y="398" width="692" height="500" rx="14" fill="#f3f6ff" stroke="#c7d2fe" stroke-width="1.4"/>
+
+  <!-- ===== S2 band: 实例之间 (cluster A; one cluster -> M instances) ===== -->
+  <rect x="84" y="390" width="692" height="500" rx="14" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <rect x="100" y="402" width="40" height="24" rx="6" fill="#1d4ed8"/>
+  <text x="120" y="419" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">S2</text>
+  <text x="150" y="419" font-size="14" font-weight="700" fill="#1d4ed8">实例之间 · 集群级 KV 感知路由</text>
+  <text x="760" y="419" text-anchor="end" font-size="11.5" fill="#6366f1">集群 A　·　× N 集群（跨区域）</text>
+
+  <!-- S2 scheduling entity: cluster router / LB -->
+  <rect x="100" y="436" width="664" height="46" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="116" y="455" font-size="12.5" font-weight="700" fill="#1d4ed8">集群路由器 / Gateway（选实例，不接管引擎内调度）· 查 KV Directory</text>
+  <text x="116" y="473" font-size="10.5" fill="#1e40af">score = prefix locality + effective hit length + load（+ tier/link）·  无状态 RR 命中 1.7% → KV-aware 92.2%</text>
+
+  <!-- ghost instance (multiplicity hint) -->
+  <rect x="124" y="514" width="624" height="368" rx="12" fill="#f7f4ff" stroke="#ddd6fe" stroke-width="1.4"/>
+
+  <!-- ===== S1 band: PD 之间 (instance A; xPyD) ===== -->
+  <rect x="116" y="506" width="624" height="368" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+  <rect x="132" y="518" width="40" height="24" rx="6" fill="#7c3aed"/>
+  <text x="152" y="535" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">S1</text>
+  <text x="182" y="535" font-size="14" font-weight="700" fill="#7c3aed">PD 之间 · 相位调度（xPyD）</text>
+  <text x="724" y="535" text-anchor="end" font-size="11.5" fill="#8b5cf6">实例 A · × M 实例 · PD 分离示例（也可 PD 混合）</text>
+
+  <!-- S1 scheduling entity: KV manager (cache-management layer) -->
+  <rect x="132" y="548" width="592" height="46" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text x="148" y="567" font-size="12" font-weight="700" fill="#b45309">KV manager · 缓存管理层　KVBM · HiCache · LMCache（runtime 中立）</text>
+  <text x="148" y="585" font-size="10.5" fill="#92400e">identity · lifecycle · placement (L1–L4) · 发 KV 事件 → Directory · offload / prefetch 经 NIXL / Mooncake</text>
+
+  <text x="428" y="612" text-anchor="middle" font-size="11" font-weight="700" fill="#6d28d9">x : y 随负载 / 服务动态扩缩容　·　P 与 D 可用不同模型切分（如 TP4 → TP8）</text>
+
+  <!-- Prefill pool (xP) -->
+  <rect x="132" y="630" width="286" height="200" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="275" y="652" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">Prefill Pool</text>
+  <text x="275" y="670" text-anchor="middle" font-size="11.5" fill="#1d4ed8">× x 副本 · TP4 · compute-bound</text>
+  <text x="275" y="687" text-anchor="middle" font-size="10.5" fill="#1e40af">最大化 cache 复用 s.t. TTFT SLO</text>
+  <!-- S0 node inside prefill -->
+  <rect x="148" y="698" width="254" height="120" rx="8" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <rect x="160" y="706" width="38" height="22" rx="5" fill="#0f766e"/>
+  <text x="179" y="722" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">S0</text>
+  <text x="206" y="722" font-size="11.5" font-weight="700" fill="#0f766e">单机内部 · 引擎内调度</text>
+  <text x="390" y="722" text-anchor="end" font-size="10.5" fill="#14b8a6">× x</text>
+  <text x="160" y="744" font-size="10.5" fill="#134e4a">continuous batching · 本地 prefix 命中</text>
+  <rect x="160" y="754" width="230" height="40" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.4"/>
+  <text x="275" y="772" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7f1d1d">GPU HBM (L1)</text>
+  <text x="275" y="787" text-anchor="middle" font-size="10" fill="#991b1b">active working set · 每步全量回读</text>
+  <text x="160" y="810" font-size="9.5" fill="#134e4a">vLLM V1 Scheduler / SGLang Radix</text>
+
+  <!-- Decode pool (yD) -->
+  <rect x="438" y="630" width="286" height="200" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="1.8"/>
+  <text x="581" y="652" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">Decode Pool</text>
+  <text x="581" y="670" text-anchor="middle" font-size="11.5" fill="#be185d">× y 副本 · TP8 · memory-bound</text>
+  <text x="581" y="687" text-anchor="middle" font-size="10.5" fill="#9d174d">最大化吞吐 s.t. TBT SLO</text>
+  <!-- S0 node inside decode -->
+  <rect x="454" y="698" width="254" height="120" rx="8" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.6"/>
+  <rect x="466" y="706" width="38" height="22" rx="5" fill="#0f766e"/>
+  <text x="485" y="722" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">S0</text>
+  <text x="512" y="722" font-size="11.5" font-weight="700" fill="#0f766e">单机内部 · 引擎内调度</text>
+  <text x="696" y="722" text-anchor="end" font-size="10.5" fill="#14b8a6">× y</text>
+  <text x="466" y="744" font-size="10.5" fill="#134e4a">continuous batching · ~1 FLOP/byte</text>
+  <rect x="466" y="754" width="230" height="40" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.4"/>
+  <text x="581" y="772" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7f1d1d">GPU HBM (L1)</text>
+  <text x="581" y="787" text-anchor="middle" font-size="10" fill="#991b1b">decode working set</text>
+  <text x="466" y="810" font-size="9.5" fill="#134e4a">每步全量回读 KV</text>
+
+  <!-- PD item flow (KV blocks prefill -> decode) -->
+  <path d="M402 774 L454 774" fill="none" stroke="#0891b2" stroke-width="2.4" marker-end="url(#arCs)"/>
+  <rect x="397.5" y="769.5" width="9" height="9" fill="#fff" stroke="#0891b2" stroke-width="1.3"/>
+  <rect x="449.5" y="769.5" width="9" height="9" fill="#fff" stroke="#0891b2" stroke-width="1.3"/>
+  <text x="428" y="693" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490" transform="rotate(-90 428 693)">KV blocks · NVLink / RDMA</text>
+
+  <!-- role note -->
+  <text x="428" y="856" text-anchor="middle" font-size="10.5" fill="#6d28d9">角色启动即固定 · Conditional Disaggregation 运行时组合 P:D · chunked prefill 为同置替代</text>
+
+  <!-- ================= RIGHT: KVCACHE DATA PLANE ================= -->
+  <rect x="904" y="118" width="548" height="850" rx="16" fill="#fcfdff" stroke="#475569" stroke-width="2.2"/>
+  <text x="1178" y="142" text-anchor="middle" font-size="12.5" font-style="italic" fill="#64748b">«block · KV data plane»</text>
+  <text x="1178" y="167" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">KVCache 存储层级 · L1 → L4</text>
+  <text x="1178" y="189" text-anchor="middle" font-size="12" fill="#64748b">热（近 GPU）→ 冷（远 GPU）· KV 体积由 attention 结构决定（GQA/MLA/SWA，差 &gt;10×）</text>
+
+  <!-- directory -->
+  <rect x="928" y="202" width="512" height="46" rx="10" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="1184" y="224" text-anchor="middle" font-size="15" font-weight="700" fill="#854d0e">KV Directory / Indexer</text>
+  <text x="1184" y="242" text-anchor="middle" font-size="11" fill="#a16207">block-hash → {tier, node} · Mooncake Master / KVIndexer（目录，不在数据路径）</text>
+  <rect x="923.5" y="218.5" width="9" height="9" fill="#fff" stroke="#ca8a04" stroke-width="1.3"/>
+  <rect x="923.5" y="235.5" width="9" height="9" fill="#fff" stroke="#ca8a04" stroke-width="1.3"/>
+
+  <!-- radius-correspondence note -->
+  <text x="1216" y="263" text-anchor="middle" font-size="11" fill="#64748b">每层左缘色标 = 所属共享半径 S0–S3 · 与左侧计算面同色一一对应（L1–L4 ↔ S0–S3）</text>
+
+  <!-- temperature strip -->
+  <rect x="918" y="270" width="12" height="646" rx="6" fill="url(#temp)" stroke="#cbd5e1" stroke-width="0.8"/>
+
+  <!-- S-level radius tags (same colors as left S0–S3) -->
+  <rect x="942" y="298" width="44" height="22" rx="5" fill="#0f766e"/><text x="964" y="314" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S0</text>
+  <rect x="942" y="437" width="44" height="22" rx="5" fill="#0f766e"/><text x="964" y="453" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S0</text>
+  <rect x="942" y="566" width="44" height="22" rx="5" fill="#7c3aed"/><text x="964" y="582" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S1</text>
+  <rect x="942" y="695" width="44" height="22" rx="5" fill="#1d4ed8"/><text x="964" y="711" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S2</text>
+  <rect x="942" y="825" width="44" height="22" rx="5" fill="#1d4ed8"/><text x="964" y="841" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S2</text>
+  <rect x="942" y="872" width="44" height="22" rx="5" fill="#4338ca"/><text x="964" y="888" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S3</text>
+
+  <!-- L1 -->
+  <rect x="992" y="270" width="448" height="78" rx="11" fill="#fecaca" stroke="#1f2937" stroke-width="2"/>
+  <text x="1216" y="298" text-anchor="middle" font-size="16" font-weight="700" fill="#7f1d1d">L1 · GPU HBM</text>
+  <text x="1216" y="319" text-anchor="middle" font-size="11.5" fill="#991b1b">hot · 单 GPU · 带宽 ~3.35TB/s</text>
+  <text x="1216" y="338" text-anchor="middle" font-size="11.5" fill="#991b1b">active decode working set</text>
+  <rect x="987.5" y="304.5" width="9" height="9" fill="#fff" stroke="#1f2937" stroke-width="1.3"/>
+
+  <!-- transition L1 <-> L2 -->
+  <path d="M1045 358 L1045 402" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arRs)"/>
+  <path d="M1387 402 L1387 358" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arBs)"/>
+  <text x="1216" y="384" text-anchor="middle" font-size="10" fill="#475569">D2H / H2D · PCIe5 ~64 GB/s（NVLink-C2C ~900 GB/s）· ~µs</text>
+
+  <!-- L2 -->
+  <rect x="992" y="412" width="448" height="72" rx="11" fill="#fed7aa" stroke="#1f2937" stroke-width="2"/>
+  <text x="1216" y="440" text-anchor="middle" font-size="16" font-weight="700" fill="#7c2d12">L2 · CPU DDR (pinned)</text>
+  <text x="1216" y="463" text-anchor="middle" font-size="11.5" fill="#9a3412">warm · 单节点 · 10–100× HBM · 快速 load-back</text>
+
+  <!-- transition L2 <-> L2.5 -->
+  <path d="M1045 494 L1045 538" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arRs)"/>
+  <path d="M1387 538 L1387 494" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arBs)"/>
+  <text x="1216" y="520" text-anchor="middle" font-size="10" fill="#475569">CXL load/store · ~数十 GB/s · 附加 ~100–250 ns</text>
+
+  <!-- L2.5 CXL -->
+  <rect x="992" y="548" width="448" height="58" rx="11" fill="#fde68a" stroke="#1f2937" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="1216" y="572" text-anchor="middle" font-size="15" font-weight="700" fill="#78350f">L2.5 · CXL memory pool</text>
+  <text x="1216" y="592" text-anchor="middle" font-size="11" fill="#92400e">warm · rack 内共享 · load/store 语义（CXL 3.x，量产尚早）</text>
+
+  <!-- transition L2.5 <-> L3 -->
+  <path d="M1045 616 L1045 660" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arRs)"/>
+  <path d="M1387 660 L1387 616" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arBs)"/>
+  <text x="1216" y="642" text-anchor="middle" font-size="10" fill="#475569">落盘 NVMe · ~数 GB/s · ~10–100 µs</text>
+
+  <!-- L3 -->
+  <rect x="992" y="670" width="448" height="72" rx="11" fill="#bfdbfe" stroke="#1f2937" stroke-width="2"/>
+  <text x="1216" y="698" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">L3 · Local SSD / NVMe</text>
+  <text x="1216" y="721" text-anchor="middle" font-size="11.5" fill="#1e40af">cold · 单节点 · ~ms · TBs · 小 I/O 控制面瓶颈</text>
+
+  <!-- transition L3 <-> L4 -->
+  <path d="M1045 752 L1045 796" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arRs)"/>
+  <path d="M1387 796 L1387 752" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arBs)"/>
+  <text x="1216" y="778" text-anchor="middle" font-size="10" fill="#475569">RDMA 网络 · 400 Gbps ≈ 50 GB/s · ~ms</text>
+
+  <!-- L4 -->
+  <rect x="992" y="806" width="448" height="110" rx="11" fill="#c7d2fe" stroke="#1f2937" stroke-width="2"/>
+  <text x="1216" y="834" text-anchor="middle" font-size="16" font-weight="700" fill="#312e81">L4 · Remote / Distributed Shared</text>
+  <text x="1216" y="857" text-anchor="middle" font-size="11.5" fill="#3730a3">cold · 集群共享 · RDMA ~ms</text>
+  <text x="1216" y="877" text-anchor="middle" font-size="11.5" fill="#3730a3">Mooncake Store · 3FS · 对象存储</text>
+  <text x="1216" y="897" text-anchor="middle" font-size="11.5" fill="#3730a3">持久后备 · 任意实例可 load-back</text>
+
+  <!-- transport caveat -->
+  <text x="1216" y="940" text-anchor="middle" font-size="9.5" fill="#94a3b8">迁移经 NIXL / Mooncake 底座 · 传输延迟 / 带宽为量级示意，随硬件代际而变</text>
+
+  <!-- ================= CROSS-PLANE CONNECTORS ================= -->
+  <!-- cluster router -> directory (lookup) -->
+  <path d="M764 459 H814 V224 H928" fill="none" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#arV)"/>
+  <text x="826" y="345" font-size="11" fill="#7c3aed" transform="rotate(-90 826 345)">lookup（查 block 位置）</text>
+  <rect x="759.5" y="454.5" width="9" height="9" fill="#fff" stroke="#7c3aed" stroke-width="1.3"/>
+
+  <!-- KV manager -> directory (KV events) -->
+  <path d="M724 571 H838 V240 H928" fill="none" stroke="#d97706" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arA)"/>
+  <text x="850" y="400" font-size="11" fill="#b45309" transform="rotate(-90 850 400)">KV events（喂目录）</text>
+  <rect x="719.5" y="566.5" width="9" height="9" fill="#fff" stroke="#d97706" stroke-width="1.3"/>
+
+  <!-- compute(S0 HBM) <-> L1 (same physical HBM) -->
+  <path d="M696 774 H862 V340 H992" fill="none" stroke="#64748b" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#arS)"/>
+  <text x="874" y="560" font-size="11" fill="#64748b" transform="rotate(-90 874 560)">L1 ≡ 同一物理 HBM · 每步回读</text>
+  <rect x="691.5" y="769.5" width="9" height="9" fill="#fff" stroke="#64748b" stroke-width="1.3"/>
+
+  <!-- response tokens return -->
+  <path d="M724 660 H884 V152 H808" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arG)"/>
+  <text x="884" y="430" font-size="11.5" fill="#15803d" transform="rotate(-90 884 430)">响应 tokens 流式返回</text>
+
+  <!-- ================= LEGEND ================= -->
+  <rect x="56" y="1022" width="1396" height="146" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="76" y="1049" font-size="14" font-weight="700" fill="#334155">图例 Legend</text>
+  <line x1="76" y1="1060" x2="1432" y2="1060" stroke="#e2e8f0" stroke-width="1.2"/>
+
+  <!-- row 1: S0–S3 scheduling levels (left chip ↔ right radius tag) -->
+  <rect x="84" y="1072" width="34" height="22" rx="5" fill="#0f766e"/><text x="101" y="1088" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S0</text>
+  <text x="126" y="1088" font-size="12" fill="#334155">单机内部 · 引擎内调度（含 L1 HBM）</text>
+  <rect x="430" y="1072" width="34" height="22" rx="5" fill="#7c3aed"/><text x="447" y="1088" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S1</text>
+  <text x="472" y="1088" font-size="12" fill="#334155">PD 之间 · 相位调度 xPyD（动态扩缩容）</text>
+  <rect x="800" y="1072" width="34" height="22" rx="5" fill="#1d4ed8"/><text x="817" y="1088" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S2</text>
+  <text x="842" y="1088" font-size="12" fill="#334155">实例之间 · 集群级 KV 感知路由</text>
+  <rect x="1130" y="1072" width="34" height="22" rx="5" fill="#4338ca"/><text x="1147" y="1088" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">S3</text>
+  <text x="1172" y="1088" font-size="12" fill="#334155">集群之间 · 跨集群跨区域</text>
+
+  <!-- row 2: flows -->
+  <line x1="84" y1="1120" x2="132" y2="1120" stroke="#475569" stroke-width="1.8" marker-end="url(#arSm)"/>
+  <text x="142" y="1125" font-size="12.5" fill="#334155">请求 / 控制流（逐层下行）</text>
+  <line x1="320" y1="1120" x2="368" y2="1120" stroke="#15803d" stroke-width="2" marker-end="url(#arG)"/>
+  <text x="378" y="1125" font-size="12.5" fill="#334155">响应 tokens 流式返回</text>
+  <line x1="540" y1="1120" x2="588" y2="1120" stroke="#0891b2" stroke-width="2.4" marker-end="url(#arCs)"/>
+  <text x="598" y="1125" font-size="12.5" fill="#334155">«item flow» KV blocks（PD / 跨实例）</text>
+  <line x1="870" y1="1120" x2="918" y2="1120" stroke="#d97706" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arA)"/>
+  <text x="928" y="1125" font-size="12.5" fill="#334155">KV events（喂目录）</text>
+  <line x1="1130" y1="1120" x2="1178" y2="1120" stroke="#7c3aed" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#arV)"/>
+  <text x="1188" y="1125" font-size="12.5" fill="#334155">目录查询 lookup</text>
+
+  <!-- row 3: data-plane + multiplicity -->
+  <line x1="96" y1="1144" x2="96" y2="1162" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arRs)"/>
+  <text x="142" y="1157" font-size="12.5" fill="#334155">驱逐 offload（热→冷）</text>
+  <line x1="320" y1="1162" x2="320" y2="1144" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arBs)"/>
+  <text x="346" y="1157" font-size="12.5" fill="#334155">预取 prefetch（冷→热）</text>
+  <line x1="540" y1="1153" x2="588" y2="1153" stroke="#64748b" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#arS)"/>
+  <text x="598" y="1157" font-size="12.5" fill="#334155">≡ 同一物理介质</text>
+  <text x="870" y="1157" font-size="12.5" font-weight="700" fill="#475569">× N / × x:y</text>
+  <text x="956" y="1157" font-size="12.5" fill="#334155">多重与动态扩缩容关系（网关→集群→实例→P/D）</text>
+</svg>
