@@ -12,5 +12,10 @@ $$
 y =x^2 + z^x
 $$
 
-```
+```C++
+#include <iostream>
+
+int main() {
+  return 0;
+}
 ```
