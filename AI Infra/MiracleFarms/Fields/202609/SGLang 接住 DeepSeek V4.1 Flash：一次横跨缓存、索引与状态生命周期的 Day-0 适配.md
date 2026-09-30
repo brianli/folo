@@ -7,7 +7,7 @@ url: "https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash
 published: 2026-09-10T20:30:00+08:00
 saved: 2026-09-30T14:23:38+08:00
 folo_key: "mf-fields::https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash-day0-code-audit/"
-updated: 2026-09-30T15:11:45+08:00
+updated: 2026-09-30T15:12:07+08:00
 tags:
   - "folo"
   - "AI_Infra"
