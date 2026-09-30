@@ -7,7 +7,7 @@ url: "https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash
 published: 2026-09-10T20:30:00+08:00
 saved: 2026-09-30T14:23:38+08:00
 folo_key: "mf-fields::https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash-day0-code-audit/"
-updated: 2026-09-30T15:13:39+08:00
+updated: 2026-09-30T15:14:03+08:00
 tags:
   - "folo"
   - "AI_Infra"
@@ -78,12 +78,7 @@ Encoder replay 处理 prefix cache 命中后的另一种缺口：global KV 命�
 
 这些 guard 没有削弱实现的价值，反而把当前能力边界说清了。Day-0 最危险的做法是让未验证组合静默运行；这里选择 fail fast，使部署者在启动时就知道要牺牲哪条优化路径。
 
-> [!note] Hello world
-
-Hello world $y =\sqrt{z+x^2}$ 看下具体例子
-
 $$
-y =x^2 + z^2
 $$
 
 ## 五、Engram：196B 条件记忆把操作系统也拉进了热路径
