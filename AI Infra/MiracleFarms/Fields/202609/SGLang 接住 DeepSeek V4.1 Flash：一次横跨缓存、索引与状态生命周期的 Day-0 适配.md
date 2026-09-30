@@ -7,6 +7,7 @@ url: "https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash
 published: 2026-09-10T20:30:00+08:00
 saved: 2026-09-30T14:23:38+08:00
 folo_key: "mf-fields::https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash-day0-code-audit/"
+updated: 2026-09-30T15:10:03+08:00
 tags:
   - "folo"
   - "AI_Infra"
@@ -77,6 +78,8 @@ Encoder replay 处理 prefix cache 命中后的另一种缺口：global KV 命�
 
 这些 guard 没有削弱实现的价值，反而把当前能力边界说清了。Day-0 最危险的做法是让未验证组合静默运行；这里选择 fail fast，使部署者在启动时就知道要牺牲哪条优化路径。
 
+$y =x^2$ 
+
 ## 五、Engram：196B 条件记忆把操作系统也拉进了热路径
 
 Engram 让本次适配出现了一个此前 KV cache 文章里很少见的状态：它有 196B 参数，却不是每 token 都走一次 dense GEMM。V4.1 在 layer 1 与 14 各放一张约 3.84 亿行的 hash embedding table，用当前 token 与最多三个前驱 token生成 2/3/4-gram hash，再稀疏查表、投影并通过 gate 注入四路 mHC residual stream。[\[14\]](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py#L121-L196)
@@ -111,47 +114,47 @@ Cookbook 已在独立 PR 合入，但它明确使用 `lmsysorg/sglang:dev-dsv41`
 
 我的判断是：**SGLang 已经接住 DeepSeek V4.1 Flash 的架构语义，下一阶段的主战场是把语义正确的多状态路径压成可组合、可测量、可发布的生产路径。** 如果准备现在部署，适合从 cookbook 的单节点 verified shape 起步，固定 PR head 与镜像；HiCache、PD disaggregation、DP attention、prefill CUDA Graph 和 replay 的组合应逐个打开，不要一次把所有优化叠上去。
 
-- - -
+---
 
 ## 参考资料
 
-\[1\] [SGLang PR #38798: Add DeepSeek V4.1 support](https://github.com/sgl-project/sglang/pull/38798)
+[1] [SGLang PR #38798: Add DeepSeek V4.1 support](https://github.com/sgl-project/sglang/pull/38798)
 
-\[2\] [SGLang commit 85f8105f: Add DeepSeek V4.1 Day 0 support](https://github.com/sgl-project/sglang/commit/85f8105f5d2e2e0bdea70ff50cb5449bf9567053)
+[2] [SGLang commit 85f8105f: Add DeepSeek V4.1 Day 0 support](https://github.com/sgl-project/sglang/commit/85f8105f5d2e2e0bdea70ff50cb5449bf9567053)
 
-\[3\] [DeepSeek-V4.1-Flash config.json](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/config.json)
+[3] [DeepSeek-V4.1-Flash config.json](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/config.json)
 
-\[4\] [SGLang DeepSeek V4 model integration at commit 7bdebdab](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/models/deepseek_v4.py)
+[4] [SGLang DeepSeek V4 model integration at commit 7bdebdab](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/models/deepseek_v4.py)
 
-\[5\] [DeepSeek-V4.1-Flash Technical Report](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/DeepSeek_V41_Tech_Report.pdf)
+[5] [DeepSeek-V4.1-Flash Technical Report](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/DeepSeek_V41_Tech_Report.pdf)
 
-\[6\] [SGLang DeepSeek V4 attention backend at commit 7bdebdab](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/deepseek_v4_backend.py)
+[6] [SGLang DeepSeek V4 attention backend at commit 7bdebdab](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/deepseek_v4_backend.py)
 
-\[7\] [SGLang V4.1 low-ratio compressor and indexer](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/dsv4/dsv41_sparse.py)
+[7] [SGLang V4.1 low-ratio compressor and indexer](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/dsv4/dsv41_sparse.py)
 
-\[8\] [DeepSeek-V4.1-Flash model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/README.md)
+[8] [DeepSeek-V4.1-Flash model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/dba1be0a40aa45a94ad051997016db3960a90277/README.md)
 
-\[9\] [SGLang V4.1 hierarchical indexer decode path](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/deepseek_v4_backend.py#L3247-L3360)
+[9] [SGLang V4.1 hierarchical indexer decode path](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/attention/deepseek_v4_backend.py#L3247-L3360)
 
-\[10\] [DeepGEMM PR #432: paged sparse MQA logits](https://github.com/deepseek-ai/DeepGEMM/pull/432)
+[10] [DeepGEMM PR #432: paged sparse MQA logits](https://github.com/deepseek-ai/DeepGEMM/pull/432)
 
-\[11\] [SGLang decoder SWA bounded replay layer boundary](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/models/deepseek_v4.py#L3410-L3425)
+[11] [SGLang decoder SWA bounded replay layer boundary](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/models/deepseek_v4.py#L3410-L3425)
 
-\[12\] [SGLang encoder SWA bounded replay](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/model_executor/encoder_swa_replay.py)
+[12] [SGLang encoder SWA bounded replay](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/model_executor/encoder_swa_replay.py)
 
-\[13\] [SGLang DeepSeek V4.1 feature compatibility guards](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/arg_groups/deepseek_v4_hook.py#L224-L339)
+[13] [SGLang DeepSeek V4.1 feature compatibility guards](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/arg_groups/deepseek_v4_hook.py#L224-L339)
 
-\[14\] [SGLang Engram hash layout and lookup implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py)
+[14] [SGLang Engram hash layout and lookup implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py)
 
-\[15\] [SGLang Engram host table implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py#L531-L677)
+[15] [SGLang Engram host table implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py#L531-L677)
 
-\[16\] [SGLang Engram request history and verify commit](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py#L199-L447)
+[16] [SGLang Engram request history and verify commit](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/layers/engram.py#L199-L447)
 
-\[17\] [SGLang PR #38802: DeepSeek-V4.1 Flash cookbook](https://github.com/sgl-project/sglang/pull/38802)
+[17] [SGLang PR #38802: DeepSeek-V4.1 Flash cookbook](https://github.com/sgl-project/sglang/pull/38802)
 
-\[18\] [SGLang DeepSeek V4.1 end-to-end test](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/test/registered/models_e2e/test_deepseek_v41.py)
+[18] [SGLang DeepSeek V4.1 end-to-end test](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/test/registered/models_e2e/test_deepseek_v41.py)
 
-\[19\] [SGLang DeepSeek V4.1 chat encoding implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/entrypoints/openai/encoding_dsv41.py)
+[19] [SGLang DeepSeek V4.1 chat encoding implementation](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/entrypoints/openai/encoding_dsv41.py)
 
 ### 版本对齐信息
 
