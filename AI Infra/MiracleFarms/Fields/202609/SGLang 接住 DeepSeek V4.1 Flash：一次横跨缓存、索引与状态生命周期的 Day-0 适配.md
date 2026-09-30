@@ -7,7 +7,7 @@ url: "https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash
 published: 2026-09-10T20:30:00+08:00
 saved: 2026-09-30T14:23:38+08:00
 folo_key: "mf-fields::https://miraclefarms.github.io/notes/2026/09/10/sglang-deepseek-v4-1-flash-day0-code-audit/"
-updated: 2026-09-30T15:13:11+08:00
+updated: 2026-09-30T15:13:39+08:00
 tags:
   - "folo"
   - "AI_Infra"
@@ -77,6 +77,8 @@ Encoder replay 处理 prefix cache 命中后的另一种缺口：global KV 命�
 **128-token 回放把灾难性的全层重算改成有界退化，但近似性被写进了模型训练假设。** 这不是一个可以随意移植到其他 SWA 模型的通用 cache trick。SGLang 也用 feature guard 把风险显式挡在启动阶段：encoder replay 暂时不能与 prefill CUDA Graph、DP attention、speculation、context parallel、HiCache、PD disaggregation、LoRA 等路径组合；decoder replay不能与 prefill CUDA Graph 和 DP attention同时打开。[\[13\]](https://github.com/sgl-project/sglang/blob/7bdebdab7db4befb71c64ae0d6f0eb37fe7d8402/python/sglang/srt/arg_groups/deepseek_v4_hook.py#L224-L339)
 
 这些 guard 没有削弱实现的价值，反而把当前能力边界说清了。Day-0 最危险的做法是让未验证组合静默运行；这里选择 fail fast，使部署者在启动时就知道要牺牲哪条优化路径。
+
+> [!note] Hello world
 
 Hello world $y =\sqrt{z+x^2}$ 看下具体例子
 
