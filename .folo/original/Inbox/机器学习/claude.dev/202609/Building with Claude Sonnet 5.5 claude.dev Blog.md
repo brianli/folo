@@ -6,7 +6,7 @@ group: "机器学习"
 author: "Addy Osmani"
 url: "https://claude.dev/blog/building-with-claude-sonnet-5-5/"
 published: 2026-09-28T08:00:00+08:00
-saved: 2026-10-01T09:45:03+08:00
+saved: 2026-10-01T09:47:55+08:00
 folo_key: "url::https://claude.dev/blog/building-with-claude-sonnet-5-5"
 tags:
   - "folo"
