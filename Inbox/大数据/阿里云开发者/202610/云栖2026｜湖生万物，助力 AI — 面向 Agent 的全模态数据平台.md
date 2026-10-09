@@ -96,3 +96,11 @@ EMR StarRocks 围绕"结构化分析极致性能"与"全模态混合检索"两�
 当 Agent 成为数据平台的新用户，当全模态成为主流数据形态，基础设施必须全面重构。
 
 DLF 以 Paimon 2.0 + Fluss 湖流一体统一全模态管理；EMR Ray + Daft 打通从数据加工到模型训练的 AI 数据管线；StarRocks 凭借混合检索能力让 Agent 实现精准混合检索；Flink 以 Streaming Agent 驱动实时业务行动——四者协同配合 Milvus 向量引擎，形成完整的 Agentic Lake + Agentic Streaming 技术体系。阿里云开源大数据平台提供全托管服务与深度优化，让企业既享受开源灵活性，又获得企业级稳定性与性能。从"湖生万物"到"助力 AI"，阿里云开源大数据平台正在成为构建 Agent 时代全模态数据基础设施的必然选择。
+
+<!-- folo:annotations -->
+## 批注
+
+- ==Agentic Lake + Agentic Streaming==
+
+<!-- folo:data [{"id":8,"rel_path":"","kind":"highlight","color":"red","quote":"Agentic Lake + Agentic Streaming","prefix":"y/Daft、EMR StarRocks、Milvus 五大核心产品协同构建了\"","suffix":"\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供下一代","note":"","created_at":1791547510,"updated_at":1791547510}] -->
+<!-- /folo:annotations -->
