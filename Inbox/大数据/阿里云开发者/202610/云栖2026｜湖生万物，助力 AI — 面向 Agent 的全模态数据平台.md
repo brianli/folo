@@ -101,6 +101,7 @@ DLF 以 Paimon 2.0 + Fluss 湖流一体统一全模态管理；EMR Ray + Daft �
 ## 批注
 
 - ==Agentic Lake + Agentic Streaming==
+- <u>DLF、Flink、EMR Spark/Ray/Daft、EMR StarRocks、Milvus</u>
 
-<!-- folo:data [{"id":8,"rel_path":"","kind":"highlight","color":"red","quote":"Agentic Lake + Agentic Streaming","prefix":"y/Daft、EMR StarRocks、Milvus 五大核心产品协同构建了\"","suffix":"\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供下一代","note":"","created_at":1791547510,"updated_at":1791547510}] -->
+<!-- folo:data [{"id":8,"rel_path":"","kind":"highlight","color":"red","quote":"Agentic Lake + Agentic Streaming","prefix":"y/Daft、EMR StarRocks、Milvus 五大核心产品协同构建了\"","suffix":"\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供下一代","note":"","created_at":1791547510,"updated_at":1791547510},{"id":9,"rel_path":"","kind":"wavy","color":"red","quote":"DLF、Flink、EMR Spark/Ray/Daft、EMR StarRocks、Milvus","prefix":"述了阿里云开源大数据平台面向 Agentic AI 时代的演进新范式。阿里云以 ","suffix":" 五大核心产品协同构建了\"Agentic Lake + Agentic Stre","note":"","created_at":1791547555,"updated_at":1791547555}] -->
 <!-- /folo:annotations -->
