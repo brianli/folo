@@ -103,6 +103,7 @@ DLF 以 Paimon 2.0 + Fluss 湖流一体统一全模态管理；EMR Ray + Daft �
 - ==Agentic Lake + Agentic Streaming==
   > Lake 代表存储，Streaming 代表计算
 - ==DLF、Flink、EMR Spark/Ray/Daft、EMR StarRocks、Milvus==
+- ==下一代全模态数据基础设施==
 
-<!-- folo:data [{"id":8,"rel_path":"","kind":"highlight","color":"red","quote":"Agentic Lake + Agentic Streaming","prefix":"y/Daft、EMR StarRocks、Milvus 五大核心产品协同构建了\"","suffix":"\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供下一代","note":"Lake 代表存储，Streaming 代表计算","created_at":1791547510,"updated_at":1791547720},{"id":9,"rel_path":"","kind":"highlight","color":"green","quote":"DLF、Flink、EMR Spark/Ray/Daft、EMR StarRocks、Milvus","prefix":"述了阿里云开源大数据平台面向 Agentic AI 时代的演进新范式。阿里云以 ","suffix":" 五大核心产品协同构建了\"Agentic Lake + Agentic Stre","note":"","created_at":1791547555,"updated_at":1791547650}] -->
+<!-- folo:data [{"id":8,"rel_path":"","kind":"highlight","color":"red","quote":"Agentic Lake + Agentic Streaming","prefix":"y/Daft、EMR StarRocks、Milvus 五大核心产品协同构建了\"","suffix":"\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供下一代","note":"Lake 代表存储，Streaming 代表计算","created_at":1791547510,"updated_at":1791547720},{"id":9,"rel_path":"","kind":"highlight","color":"green","quote":"DLF、Flink、EMR Spark/Ray/Daft、EMR StarRocks、Milvus","prefix":"述了阿里云开源大数据平台面向 Agentic AI 时代的演进新范式。阿里云以 ","suffix":" 五大核心产品协同构建了\"Agentic Lake + Agentic Stre","note":"","created_at":1791547555,"updated_at":1791547650},{"id":10,"rel_path":"","kind":"highlight","color":"pink","quote":"下一代全模态数据基础设施","prefix":"ing\"技术体系，为自动驾驶、具身智能、大模型数据预处理、企业智能运营等场景提供","suffix":"。\n\n阿里云智能集团计算平台事业部 开源大数据平台负责人王峰\n01\nAI 时代，","note":"","created_at":1791547755,"updated_at":1791547755}] -->
 <!-- /folo:annotations -->
