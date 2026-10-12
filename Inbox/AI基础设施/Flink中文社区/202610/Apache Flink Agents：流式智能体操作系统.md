@@ -8,7 +8,7 @@ url: "https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
 published: 2026-10-12T19:08:25+08:00
 saved: 2026-10-12T19:08:39+08:00
 folo_key: "url::https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
-updated: 2026-10-12T19:09:47+08:00
+updated: 2026-10-12T19:10:02+08:00
 tags:
   - "folo"
   - "Inbox"
@@ -95,9 +95,7 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 
 在可观测性方面同样有一些规划，下一阶段将做一些可观测能力的提升。首先是支持对 Event Log 做结构化检索。目前用户依据 Event Log 排查问题或调优 Agent 效果时，需要手动在文件中搜索关键字或按日志时间来筛选数据；在下个版本，期望内置对 Event Log 进行结构化检索的能力，让用户可以通过一些结构化的搜索语句直接获取想要的信息，提高易用性。第二个是 Per-Run Trace，期望以可视化的方式，从 Event Log 重建一条数据在 Agent 算子内部的完整执行轨迹，这种可视化方式对于用户排查问题和调优单条数据的执行效果非常有帮助。第三个是支持对 Memory 的可观测。Memory 是 Agent 上下文的重要组成部分，对于使用了 Memory 的 Agent 来说，理解 Memory 中存放了什么、以及在读取 Memory 时读到了什么，对于调优 Agent 效果和 Memory 的使用非常有帮助。因此在下个版本，将探索如何对 Memory 进行观测。
 
-04
-
-社区建设
+# 04. 社区建设
 
 聊完技术，下面介绍社区当前的状态。Flink Agents 于 2025 年 10 月，也就是去年 10 月，在巴塞罗那的 Flink Forward 大会上，由阿里云、Confluent、LinkedIn 和 Ververica 四家流处理领域的顶级公司联合发起。截至今年 6 月，已经发布了三个版本。
 
