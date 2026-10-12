@@ -8,7 +8,7 @@ url: "https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
 published: 2026-10-12T19:08:25+08:00
 saved: 2026-10-12T19:08:39+08:00
 folo_key: "url::https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
-updated: 2026-10-12T19:10:02+08:00
+updated: 2026-10-12T19:10:28+08:00
 tags:
   - "folo"
   - "Inbox"
@@ -107,33 +107,11 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 
 欢迎对 Flink Agents 感兴趣的开发者了解并参与 Flink Agents 社区。
 
-![[Apache Flink Agents：流式智能体操作系统-17.webp]]
-
-▼ 「Flink AI 训练营」 ▼
-
 面对海量电商评论，难以直接指导电商商品运营。本期 Flink 实训教你实时对评论进行话题分类，自动打标评论中的关注点， 实现高性能实时数据分析与处理！                  
 
 使用 Flink AI 参照教程完成实操，根据任务完成进度即有机会获得 Flink 定制洗漱包等奖品！
 
 点击查看详情[【Flink AI训练营】基于Flink对电商评论AI实时分类与情感分析](https://mp.weixin.qq.com/s?__biz=MzU3Mzg4OTMyNQ\==\&mid=2247516020\&idx=1\&sn=784a8e6da922b7b127306188487b9f26\&scene=21#wechat_redirect)
-
-![[Apache Flink Agents：流式智能体操作系统-18.webp]]
-
-- ### 作业提交链接：<https://survey.aliyun.com/apps/zhiliao/2lBuSMpa\>\_
-
-- ### 实操文档链接：<https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myCw0ajxqaWgN7R35y>
-
-![[Apache Flink Agents：流式智能体操作系统-19.webp]]
-
-（扫码查看文档）
-
-![[Apache Flink Agents：流式智能体操作系统-20.webp]]
-
-（加入钉钉共学群）
-
-![[Apache Flink Agents：流式智能体操作系统-21.webp]]
-
-▼ 「实时计算 Flink 版」 ▼
 
 复制下方链接或者扫描左边二维码
 
