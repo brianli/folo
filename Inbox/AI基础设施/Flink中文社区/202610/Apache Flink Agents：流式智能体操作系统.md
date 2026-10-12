@@ -8,6 +8,7 @@ url: "https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
 published: 2026-10-12T19:08:25+08:00
 saved: 2026-10-12T19:08:39+08:00
 folo_key: "url::https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
+updated: 2026-10-12T19:09:06+08:00
 tags:
   - "folo"
   - "Inbox"
@@ -22,9 +23,7 @@ Agent 可以说是过去一年中技术圈最炙手可热的词汇。但相信�
 
 接下来的内容将从我们认为 Agent 落地存在的问题出发，讲清楚为什么 Flink 是企业级 Agent 生产落地最合适的底座，它的设计是什么，解决了哪些问题，最后再介绍当前的社区状态。
 
-01
-
-Why Flink Agents
+01Why Flink Agents
 
 首先探讨为什么 Flink 是最适合作为企业级 Agent 生产落地的底座。从这张全景图出发：从使用场景来看，当前的 Agent 可分为两个场景。第一个是面向终端用户的 Agent 场景，例如当下广泛使用的 Coding Agent、Computer Use Agent。
 
@@ -120,15 +119,15 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 
 面对海量电商评论，难以直接指导电商商品运营。本期 Flink 实训教你实时对评论进行话题分类，自动打标评论中的关注点， 实现高性能实时数据分析与处理！                  
 
-使用 Flink AI 参照教程完成实操，根据任务完成进度即有机会获得 Flink 定制洗漱包等奖品！  
+使用 Flink AI 参照教程完成实操，根据任务完成进度即有机会获得 Flink 定制洗漱包等奖品！
 
-点击查看详情[【Flink AI训练营】基于Flink对电商评论AI实时分类与情感分析](https://mp.weixin.qq.com/s?__biz=MzU3Mzg4OTMyNQ==&mid=2247516020&idx=1&sn=784a8e6da922b7b127306188487b9f26&scene=21#wechat_redirect)
+点击查看详情[【Flink AI训练营】基于Flink对电商评论AI实时分类与情感分析](https://mp.weixin.qq.com/s?__biz=MzU3Mzg4OTMyNQ\==\&mid=2247516020\&idx=1\&sn=784a8e6da922b7b127306188487b9f26\&scene=21#wechat_redirect)
 
 ![[Apache Flink Agents：流式智能体操作系统-18.webp]]
 
-- ### 作业提交链接：https://survey.aliyun.com/apps/zhiliao/2lBuSMpa\_
+- ### 作业提交链接：<https://survey.aliyun.com/apps/zhiliao/2lBuSMpa\>\_
 
-- ### 实操文档链接：https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myCw0ajxqaWgN7R35y
+- ### 实操文档链接：<https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myCw0ajxqaWgN7R35y>
 
 ![[Apache Flink Agents：流式智能体操作系统-19.webp]]
 
@@ -146,11 +145,11 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 
 即可免费试用阿里云 **Serverless Flink**，体验新一代实时计算平台的强大能力！
 
-了解试用详情：https://free.aliyun.com/?productCode=sc
+了解试用详情：<https://free.aliyun.com/?productCode=sc>
 
 ![[Apache Flink Agents：流式智能体操作系统-22.webp]]
 
-- - -
+---
 
 ▼ 关注「**Apache Flink**」 ▼
 
@@ -160,4 +159,4 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 
 ![[Apache Flink Agents：流式智能体操作系统-24.gif]]
 
-    ******点击「阅****读**原文**」********跳转**阿里云实时计算 Flink～************
+  **点击「阅读**原文」**跳转**阿里云实时计算 Flink～\*\*\*\*
