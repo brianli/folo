@@ -8,7 +8,7 @@ url: "https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
 published: 2026-10-12T19:08:25+08:00
 saved: 2026-10-12T19:08:39+08:00
 folo_key: "url::https://mp.weixin.qq.com/s/9YZkZsDbid_FFrSTVOC4-g"
-updated: 2026-10-12T19:10:28+08:00
+updated: 2026-10-12T19:10:41+08:00
 tags:
   - "folo"
   - "Inbox"
@@ -106,29 +106,3 @@ Memory 是 Agent 原语中比较特殊的一个。由于大模型的上下文并
 目前社区已有四十多位贡献者，他们来自阿里云、LinkedIn、Confluent、AWS、腾讯、美团等各大公司，也包括一些创业公司，遍布世界各地。这里也列出了一些与 Flink Agents 相关的链接，包括 GitHub、文档站和 Slack；其中 Slack 有面向开发者和面向用户的两个频道。
 
 欢迎对 Flink Agents 感兴趣的开发者了解并参与 Flink Agents 社区。
-
-面对海量电商评论，难以直接指导电商商品运营。本期 Flink 实训教你实时对评论进行话题分类，自动打标评论中的关注点， 实现高性能实时数据分析与处理！                  
-
-使用 Flink AI 参照教程完成实操，根据任务完成进度即有机会获得 Flink 定制洗漱包等奖品！
-
-点击查看详情[【Flink AI训练营】基于Flink对电商评论AI实时分类与情感分析](https://mp.weixin.qq.com/s?__biz=MzU3Mzg4OTMyNQ\==\&mid=2247516020\&idx=1\&sn=784a8e6da922b7b127306188487b9f26\&scene=21#wechat_redirect)
-
-复制下方链接或者扫描左边二维码
-
-即可免费试用阿里云 **Serverless Flink**，体验新一代实时计算平台的强大能力！
-
-了解试用详情：<https://free.aliyun.com/?productCode=sc>
-
-![[Apache Flink Agents：流式智能体操作系统-22.webp]]
-
----
-
-▼ 关注「**Apache Flink**」 ▼
-
-回复 FFA 2026 获取大会资料
-
-![[Apache Flink Agents：流式智能体操作系统-23.webp]]
-
-![[Apache Flink Agents：流式智能体操作系统-24.gif]]
-
-  **点击「阅读**原文」**跳转**阿里云实时计算 Flink～\*\*\*\*
